@@ -1,5 +1,5 @@
 from ctre import WPI_TalonSRX
-from wpilib import Joystick, Spark, Talon
+from wpilib import Joystick, Spark, Talon # OH?
 import magicbot
 import wpilib
 from components.DRIVER import Chassis
@@ -14,21 +14,21 @@ class Joker(magicbot.MagicRobot):
 
     def createObjects(self):
         """ Create motors, sensors and all your components here. """
-        left_master = TalonSRX(1)
-        left_slave = Fag(5)
-        right_master = Spark(2)
-        right_slave = Talon(3)
+        self.chassis_left_master = TalonSRX(1)
+        self.chassis_left_slave = TalonSRX(5)
+        self.chassis_right_master = TalonSRX(2)
+        self.chassis_right_slave = TalonSRX(3)
 
         self.chassis_gyro = AHRS.create_spi()
         self.joystick = Joystick(0)
 
     def disabledInit(self):
-        if self.drivePID.enabled:  # Was ist das? magik?
+        if self.drivePID.enabled:  # Was ist das? magik? Shirimasen
             self.drivePID.close()
 
     def robotPeriodic(self):
         if self.isAutonomousEnabled():
-            # Wtf should i do?
+            #i need to add a function that is the Exact Opposite of set_teleop()
             pass
         elif self.isOperatorControlEnabled():
             self.chassis.set_teleop()
@@ -36,12 +36,15 @@ class Joker(magicbot.MagicRobot):
     def teleopInit(self):
         """ Called when teleop starts. """
         NetworkTables.initialize(server="10.43.20.149")
-        self.WTFPLUSSSS = NetworkTables.getTable("SmartDashboard")
+        #WTH do i suppose to call it?
+        self.driverStation = NetworkTables.getTable("SmartDashboard")
         self.chassis.reset()
+        #Umm... i dont really know what to do here... 
 
     def teleopPeriodic(self):
         """ Called on each iteration of the control loop. """
         self.chassis.set_speed(-self.joystick.getX(), -self.joystick.getZ())
+        self.chassis.set_drive_mode()
 
 
 if __name__ == '__main__':
